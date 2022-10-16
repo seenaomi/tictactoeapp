@@ -95,4 +95,14 @@ public class TicTacToe {
         }
         turn = 1;
     }
+
+    public String result() {
+        if(whoWon() > 0) {
+            return "Player " + whoWon() + " won!";
+        } else if(canNotPlay()){
+            return "Tie Game!";
+        } else {
+            return "PLAY !!";
+        }
+    }
 }
