@@ -1,6 +1,8 @@
 package com.capstone.tictactoeapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.view.Gravity;
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
             status.setBackgroundColor(Color.RED);
             enableButtons(false);
             status.setText(tttGame.result());
+            showNewGameDialog(); //offer to play again
         }
     }
 
@@ -87,6 +90,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void resetButtons() {
+        for(int row = 0; row < TicTacToe.SIDE; row++){
+            for(int col = 0; col < TicTacToe.SIDE; col++) {
+                buttons[row][col].setText("");
+            }
+        }
+    }
+
+    public void showNewGameDialog() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("This is fun");
+        alert.setMessage("Play again?");
+        PlayDialog playAgain = new PlayDialog();
+        alert.setPositiveButton("YES", playAgain);
+        alert.setNegativeButton("NO", playAgain);
+        alert.show();
+    }
+
     private class ButtonHandler implements View.OnClickListener{
         public void onClick(View v) {
             for(int row = 0; row < TicTacToe.SIDE; row++){
@@ -95,6 +116,20 @@ public class MainActivity extends AppCompatActivity {
                         update(row, column);
                     }
                 }
+            }
+        }
+    }
+
+    private class PlayDialog implements DialogInterface.OnClickListener {
+        public void onClick(DialogInterface dialog, int id) {
+            if(id == -1) /* YES button */ {
+                tttGame.resetGame();
+                enableButtons(true);
+                resetButtons();
+                status.setBackgroundColor(Color.GREEN);
+                status.setText(tttGame.result());
+            } else if(id == -2) /* NO Button */ {
+                MainActivity.this.finish();
             }
         }
     }
